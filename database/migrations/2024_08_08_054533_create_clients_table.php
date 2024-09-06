@@ -17,6 +17,7 @@ class CreateClientsTable extends Migration
             $table->bigIncrements('id');
             $table->integer('supervisor_id')->default('0');
             $table->integer('lawyer_id')->default('0');
+            $table->string('image')->nullable();
             $table->string('name')->nullable();
             $table->string('email')->unique();
             $table->string('phone_number')->nullable();

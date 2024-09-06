@@ -11,45 +11,51 @@ use Illuminate\Support\Facades\Auth;
 
 class SupervisorController extends Controller
 {
-    public function register(Request $request){
-        $attrs = Validator($request->all(), [
-             'email' => 'required|email',
-             'password' => 'required|min:6'
-         ]);
+    // public function register(Request $request){
+    //     $attrs = Validator($request->all(), [
+    //          'email' => 'required|email',
+    //          'password' => 'required|min:6'
+    //      ]);
      
-         if($attrs->fails()){
-             return response()->json([
-              'status' =>false,
-              'message' => $attrs->errors()
-             ]);
-         }
+    //      if($attrs->fails()){
+    //          return response()->json([
+    //           'status' =>false,
+    //           'message' => $attrs->errors()
+    //          ]);
+    //      }
                
-        //  $password = password_hash($request->password, PASSWORD_DEFAULT);
-         $supervisor = Supervisor::create([
-            'email' => $request->email,
-            'password' => $request->password
-          ]);
+    //     //  $password = password_hash($request->password, PASSWORD_DEFAULT);
+    //      $supervisor = Supervisor::create([
+    //         'email' => $request->email,
+    //         'password' => $request->password
+    //       ]);
       
-          if(!$supervisor){
-           return response()->json([
-             'status' => false,
-             'message' => 'Something went Wrong'
-           ]);
-          }else{
-          return response()->json([
-          'status' => true,
-          'message' => 'Registered Supervisor Acc'
-        //   'token' => $supervisor->createToken('supervisor')->accessToken
-          ]);
-          }
-
-        }
+    //       if(!$supervisor){
+    //        return response()->json([
+    //          'status' => false,
+    //          'message' => 'Something went Wrong'
+    //        ]);
+    //       }else{
+    //       return response()->json([
+    //       'status' => true,
+    //       'message' => 'Registered Supervisor Acc'
+    //     //   'token' => $supervisor->createToken('supervisor')->accessToken
+    //       ]);
+    //       }
+    //     }
 
         public function login(Request $request){
        $attrs = validator($request->all(), [
            'email' => 'required|email',
            'password' => 'required|min:6'
        ]);
+
+       if($attrs->fails()){
+        return response()->json([
+           'status' => false,
+           'message' => $attrs->errors()
+        ]);
+       }
 
         // $credentials = $request->only('email', 'password');
     //    if(!Auth::attempt(['name'=> $request->name, 'email' => $request->email, 'password' => $request->password])){
@@ -121,9 +127,9 @@ class SupervisorController extends Controller
      * @param  \App\Models\Supervisor  $supervisor
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show()
     {
-      $supervisor =  Supervisor::find($id);
+      $supervisor =  Supervisor::find(Auth::id());
       if($supervisor){
         // $res = $superviser->with('lawyers')->get();
         // $res = $superviser;
@@ -141,9 +147,30 @@ class SupervisorController extends Controller
      * @param  \App\Models\Supervisor  $supervisor
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, Supervisor $supervisor)
+    public function update(Request $request)
     {
-        //
+        $supervisor = Supervisor::find(Auth::id());
+        if(!$supervisor){
+            return response()->json([
+        'status' => false,
+        'message' => 'not found'
+            ]);
+        }else{
+            if($request->image){
+                $image = $this->saveImage($request->image, 'supervisor');
+                $supervisor->image = $image;
+                    }
+            $supervisor->name = $request->name;
+            $supervisor->phone_number = $request->phone_number;
+            $supervisor->address = $request->address;
+          $res = $supervisor->update();
+           if($res){
+            return response()->json([
+               'status' => true,
+               'message' => 'Update Successful'
+            ]);
+           }
+        }
     }
 
     /**
@@ -152,29 +179,27 @@ class SupervisorController extends Controller
      * @param  \App\Models\Supervisor  $supervisor
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
-    {
-       $supervisor = Supervisor::find($id);
-       if(!$supervisor){
-        return response()->json([
-          'status' => false,
-          'message' => 'Not found'
-        ]);
-       }else{
-        $res = $supervisor->delete();
-        if(!$res){
-          return response()->json([
-          'status' => false,
-          'message' => 'Something went Wrong'
-          ]);
-        }else{
-        return response()->json([
-        'status' => true,
-        'message' => 'deleted'
-        ]);            
-        }
-        
-
-       }
-    }
+    // public function destroy()
+    // {
+    //    $supervisor = Supervisor::find(Auth::id());
+    //    if(!$supervisor){
+    //     return response()->json([
+    //       'status' => false,
+    //       'message' => 'Not found'
+    //     ]);
+    //    }else{
+    //     $res = $supervisor->delete();
+    //     if(!$res){
+    //       return response()->json([
+    //       'status' => false,
+    //       'message' => 'Something went Wrong'
+    //       ]);
+    //     }else{
+    //     return response()->json([
+    //     'status' => true,
+    //     'message' => 'deleted'
+    //     ]);            
+    //     }
+    //    }
+    // }
 }

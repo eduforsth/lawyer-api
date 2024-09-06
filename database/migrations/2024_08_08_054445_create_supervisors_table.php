@@ -18,7 +18,7 @@ class CreateSupervisorsTable extends Migration
             $table->string('image')->nullable();
             $table->string('name')->nullable();
             $table->string('email')->unique();
-            $table->integer('phone_number')->nullable();
+            $table->string('phone_number')->nullable();
             $table->text('address')->nullable();
             $table->string('password');
             $table->timestamps();

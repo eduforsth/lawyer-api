@@ -28,7 +28,7 @@ class AdminController extends Controller
         // 'status' => false,
         // 'message' => 'already created'
         //     ], 500);
-        //  }
+        // 
          $admin = Admin::create([
            'email' => $request->email,
            'password' => $request->password
@@ -55,13 +55,22 @@ class AdminController extends Controller
 
          $admin = Admin::where('email', $request->email)->first();
             //   if(Auth::attempt(['email'=> $request->name, 'password'=>$request->password])){
-              if($admin){
+             
+            if($admin){
+              if($request->password != $admin->password){
+                return response()->json([
+              'status' => false,
+              'message' => 'check password'
+                ]);
+              }else{
                 // $user = Auth::user();
                 return response()->json([
                 'status' => true,
                 'data' => $admin,
-                'token' => $admin->createToken('admins')->accessToken
-                ]);
+                  'token' => $admin->createToken('admin')->accessToken
+                ]);                
+              }
+
               }else{
               return response()->json([
                  'status' => false,

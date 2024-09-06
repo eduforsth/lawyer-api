@@ -87,79 +87,98 @@ class ClientController extends Controller
          }
           }
 
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function index()
-    {
-        //
-    }
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
-
-    /**
-     * Display the specified resource.
-     *
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function show(Client $client)
-    {
-        //
-    }
-
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(Client $client)
-    {
-        //
-    }
-
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function update(Request $request, Client $client)
-    {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Client  $client
-     * @return \Illuminate\Http\Response
-     */
-    public function destroy(Client $client)
-    {
-        //
-    }
+          public function show($id)
+          {
+            $client =  Client::find($id);
+            if(!$client){
+              return response()->json([
+          'status' => false,
+          'data' => 'client Not Found!'
+              ]);
+             }else{
+              return response()->json([
+             'status' => true,
+             'data' => $client
+              ]);
+             }
+          }
+      
+          /**
+           * Update the specified resource in storage.
+           *
+           * @param  \Illuminate\Http\Request  $request
+           * @param  \App\Models\Supervisor  $supervisor
+           * @return \Illuminate\Http\Response
+           */
+          public function update(Request $request, $id)
+          {
+            $attrs = Validator($request->all(), [
+              'name' => 'required',
+              'phone_number' => 'required',
+              'address' => 'required',
+          ]);
+      
+          if($attrs->fails()){
+              return response()->json([
+               'status' =>false,
+               'message' => $attrs->errors()
+              ]);
+          }
+      
+          $lawyer = Client::find($id);
+          if(!$lawyer){
+            return response()->json([
+             'status' => false,
+             'message' => 'Not found'
+            ]);
+          }
+          $client->name = $request->name;
+          $client->phone_number = $request->phone_number;
+          $client->address = $request->address;
+         $res = $client->update();
+      
+         if(!$res){
+          return response()->json([
+           'status' =>false,
+           'message' => 'Fail Update'
+          ]);
+         }else{
+         return response()->json([
+         'status' => true,
+          'message' => 'Updated client'
+       //   'token' => $lawyer->createToken('lawyer')->accessToken
+         ]);            
+         }
+      
+          }
+      
+          /**
+           * Remove the specified resource from storage.
+           *
+           * @param  \App\Models\Supervisor  $supervisor
+           * @return \Illuminate\Http\Response
+           */
+          public function destroy($id)
+          {
+            $client = Client::find($id);
+            if(!$client){
+              return response()->json([
+                 'status' => false,
+                 'message' => 'Not Found'
+              ]);
+            }
+      
+            $res = $client->delete();
+            if(!$res){
+              return response()->json([
+                  'status' => false,
+                  'message' => 'Something went Wrong'
+               ]);
+            }else{
+              return response()->json([
+                  'status' => true,
+                  'message' => 'Deleted'
+               ]);
+            }
+          }
 }

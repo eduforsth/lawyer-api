@@ -10,8 +10,9 @@ use Illuminate\Support\Facades\Auth;
 class LawyerController extends Controller
 {
     public function register(Request $request){
-      return 'hello';
+      // return 'hello';
         $attrs = Validator($request->all(), [
+             'name' => 'required',
              'email' => 'required|email',
              'password' => 'required|min:6'
          ]);
@@ -24,19 +25,21 @@ class LawyerController extends Controller
          }
 
          $isLawyer = Lawyer::where('email', $request->email)->get();
-   $password = password_verify($request->password, $isLawyer[0]->password);
          
-         if(count($isLawyer)>0 && !$password){
+         if(count($isLawyer)>0){
            return response()->json([
         'status' => false,
         'message' => 'invalid credential'
            ]);
          }
-        //  $password = password_hash($request->password, PASSWORD_DEFAULT);
+  //  $password = password_verify($request->password, $isLawyer[0]->password);
+
+         $password = password_hash($request->password, PASSWORD_DEFAULT);
          $lawyer = Lawyer::create([
             'supervisor_id' => Auth::id(),
+            'name' => $request->name,
             'email' => $request->email,
-            'password' => $request->password
+            'password' => $password
           ]);
 
           if(!$lawyer){
@@ -88,32 +91,6 @@ class LawyerController extends Controller
         ]);
        }
         }
-    /**
-     * Display a listing of the resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-
-    /**
-     * Show the form for creating a new resource.
-     *
-     * @return \Illuminate\Http\Response
-     */
-    public function create()
-    {
-        //
-    }
-
-    /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return \Illuminate\Http\Response
-     */
-    public function store(Request $request)
-    {
-        //
-    }
 
     /**
      * Display the specified resource.

@@ -18,17 +18,17 @@ class CreateNoteCasesTable extends Migration
             $table->integer('supervisor_id')->default('0');
             $table->integer('lawyer_id')->default('0');
             $table->integer('client_id')->default('0');
-            $table->string('client_name');
-            $table->string('court_name');
-            $table->string('judge_name')->nullable();
-            $table->string('case_name');
+            $table->string('client_name')->nullable();
+            $table->string('case_name')->nullable();
             $table->string('case_no')->nullable();
-            $table->string('case_year')->nullable();
-            $table->string('other_party_name')->nullable();
-            $table->string('opposite_advocate_name')->nullable();
-            $table->string('previous_hearing_date');
+            $table->string('court_name')->nullable();
+            $table->string('tayalo_name')->nullable();
+            $table->string('tayakhan_name')->nullable();
+            $table->string('tayalo_lawyer_name')->nullable();
+            $table->string('tayakhan_lawyer_name')->nullable();
+            $table->string('case_accepted_date')->default('');
             $table->string('next_hearing_date')->nullable();
-            $table->string('case_accepted_date')->nullable();
+            $table->string('alarm')->nullable();
             $table->timestamps();
         });
     }

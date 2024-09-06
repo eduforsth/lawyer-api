@@ -21,4 +21,8 @@ class Supervisor extends Authenticatable
     public function lawyers(){
        return $this->hasMany(Lawyer::class);
     }
+
+    public function payment(){
+        return $this->hasOne(Payment::class);
+    }
 }

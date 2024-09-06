@@ -10,7 +10,6 @@ use Illuminate\Support\Facades\Auth;
 
 class SupervisorController extends Controller
 {
-
         public function login(Request $request){
        $attrs = validator($request->all(), [
            'email' => 'required|email',
@@ -42,6 +41,12 @@ class SupervisorController extends Controller
                 'message' => 'Wrong Password'
                    ]);
         }else{
+            if($request->image){
+        $image = $this->saveImage($request->file('image'), 'supervisor');
+        $super[0]->image = $image;
+        $super[0]->update();
+            }
+
 return response()->json([
        'status' =>true,
        'data' => $super[0],

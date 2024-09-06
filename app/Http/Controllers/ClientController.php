@@ -64,11 +64,6 @@ class ClientController extends Controller
           ]);
          }
   
-          // $credentials = $request->only('email', 'password');
-      //    if(!Auth::attempt(['name'=> $request->name, 'email' => $request->email, 'password' => $request->password])){
-  
-      // $password = password_hash($request->password, PASSWORD_DEFAULT);
-      // $password = password_verify($request->password, Supervisor::where('email', $request->email)->select('password'));
      $client = Client::orderBy('created_at', 'desc')->where('email', $request->email)->get();
          if(!(count($client)==1)){
              return response()->json([
@@ -85,7 +80,8 @@ class ClientController extends Controller
           }else{
           return response()->json([
          'status' =>true,
-         'data' => $client[0]->createToken('client')->accessToken
+         'data' => $client[0],
+         'token' => $client[0]->createToken('client')->accessToken
           ]);
           }
           

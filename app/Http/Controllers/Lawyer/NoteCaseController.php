@@ -38,16 +38,33 @@ class NoteCaseController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request, $id)
+    public function store(Request $request)
     {
+      $attrs = Validator($request->all(), [
+        'client_name' => 'required',
+       ]);
+
+       if($attrs->fails()){
+           return response()->json([
+         'status' => false,
+         'message' => $attrs->errors()
+           ]);
+       }
+
         $case = new NoteCase();
-        $case->supervisor_id = $id;
-        // $case->lawyer_id = $request->lawyer_id;
-        // $case->client_id = $request->client_id;
+        $case->supervisor_id = $request->supervisor_id;
+        $case->lawyer_id = $request->lawyer_id;
+         $case->client_id = $request->client_id;
         $case->client_name = $request->client_name;
-        $case->court_name = $request->court_name;
         $case->case_name = $request->case_name;
-        $case->previous_hearing_date = $request->previous_hearing_date;
+        $case->case_no = $request->case_no;
+        $case->court_name = $request->court_name;
+        $case->tayalo_name = $request->tayalo_name;
+        $case->tayakhan_name = $request->tayakhan_name;
+        $case->tayalo_lawyer_name = $request->tayalo_lawyer_name;
+        $case->tayakhan_lawyer_name = $request->tayakhan_lawyer_name;
+        $case->case_accepted_date = $request->case_accepted_date;
+        $case->next_hearing_date = $request->next_hearing_date;
         $case->save();
 
         if($case){
@@ -83,17 +100,6 @@ class NoteCaseController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\NoteCase  $noteCase
-     * @return \Illuminate\Http\Response
-     */
-    public function edit(NoteCase $noteCase)
-    {
-        //
-    }
-
-    /**
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -104,16 +110,6 @@ class NoteCaseController extends Controller
     {
         $attrs = Validator($request->all(), [
          'client_name' => 'required',
-         'court_name' => 'required',
-        //  'judge_name' => 'required',
-         'case_name' => 'required',
-        //  'case_no' => 'required',
-        //  'case_year' => 'required',
-        //  'other_party_name' => 'required',
-        //  'opposite_advocate_name' => 'required',
-         'previous_hearing_date' => 'required',
-        //  'next_hearing_date' => 'required',
-        //  'case_accepted_date' => 'required',
         ]);
 
         if($attrs->fails()){
@@ -125,16 +121,16 @@ class NoteCaseController extends Controller
 
        $noteCase = NoteCase::find($id);
        $noteCase->client_name = $request->client_name;
-       $noteCase->court_name = $request->court_name;
-       $noteCase->judge_name = $request->judge_name;
        $noteCase->case_name = $request->case_name;
        $noteCase->case_no = $request->case_no;
-       $noteCase->case_year = $request->case_year;
-       $noteCase->other_party_name = $request->other_party_name;
-       $noteCase->opposite_advocate_name = $request->opposite_advocate_name;
-       $noteCase->previous_hearing_date = $request->previous_hearing_date;
-       $noteCase->next_hearing_date = $request->next_hearing_date;
+       $noteCase->court_name = $request->court_name;
+       $noteCase->tayalo_name = $request->tayalo_name;
+       $noteCase->tayakhan_name = $request->tayakhan_name;
+       $noteCase->tayalo_lawyer_name = $request->tayalo_lawyer_name;
+       $noteCase->tayakhan_lawyer_name = $request->tayakhan_lawyer_name;
        $noteCase->case_accepted_date = $request->case_accepted_date;
+       $noteCase->next_hearing_date = $request->next_hearing_date;
+       $noteCase->alarm = $request->alarm;
       $res = $noteCase->update();
 
       if(!$res){

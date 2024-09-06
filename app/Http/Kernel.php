@@ -50,6 +50,18 @@ class Kernel extends HttpKernel
             // 'throttle:admin',
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
         ],
+
+        'lawyer' => [
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+            // 'throttle:admin',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
+
+        'client' => [
+            // \Laravel\Sanctum\Http\Middleware\EnsureFrontendRequestsAreStateful::class,
+             //'throttle:client',
+            \Illuminate\Routing\Middleware\SubstituteBindings::class,
+        ],
     ];
 
     /**

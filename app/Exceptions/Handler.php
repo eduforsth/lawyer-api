@@ -50,12 +50,15 @@ class Handler extends ExceptionHandler
                     'message' => 'Login first'
                 ]);
             }
-            else if($e instanceof QueryException){
+            else
+             if($e instanceof QueryException){
                return response()->json([
                   'status' => false,
                   'message' => 'Check Db Connection Or State'
                ]);
-            }else if($e instanceof NotFoundHttpException){
+            }
+            else
+             if($e instanceof NotFoundHttpException){
                 return response()->json([
                    'status' => false,
                    'message' => 'NotFoundHttpException'

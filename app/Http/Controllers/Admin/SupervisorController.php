@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use App\Models\Client;
 use App\Models\Lawyer;
+use App\Models\Payment;
 use App\Models\Supervisor;
 use Illuminate\Http\Request;
 
@@ -82,11 +83,11 @@ class SupervisorController extends Controller
      */
     public function index()
     {
-       $supervisor = Supervisor::get();
+       $supervisor = Supervisor::with('payment:supervisor_id,payment_date,total_amount,valid_date')->get();
        if(count($supervisor)>0){
         return response()->json([
     'status' => true,
-    'data' => $supervisor
+    'data' => $supervisor,
         ]);
        }
     }
